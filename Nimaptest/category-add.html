@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <title>category-add</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="nimaptest.html">Home</a></li>
+        <li class="breadcrumb-item"><a href="category-list.html">category-list</a></li>
+        <li class="breadcrumb-item active" aria-current="page">category-add</li>
+    </ul>
+    </div>
+    
+        <h2>Category Add</h2>
+      
+        <form >
+        <div class="mb-3 mt-3">
+            
+          
+            <h4> 
+                <label for="categoryname" class="form-label">Category Name: </label>
+            </h4>
+            <input type="text" name="categoryname" class="form-control" id="categoryname" >
+      
+        </div>
+      
+        <div class="mb-3 mt-3">
+        <button class="btn btn-primary" onclick="saveCategory()" type="button"  >Add</button>&nbsp;&nbsp;
+        <a class="btn btn-secondary" href="product-list.html">Cancel</a>
+        </div>
+        </form>
+    
+    
+    
+    
+    </div>
+    <script>
+        function saveCategory()
+        {
+            let cat_Name = document.getElementById("categoryname").value;
+            cat_Name=cat_Name.trim();
+            if(cat_Name=="")
+            {
+                document.getElementById("categoryname").focus();
+                return false;
+            }
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function() {
+                alert("Category Added Successfully.");
+                window.location.href="category-list.html";
+            }
+            xhttp.open("POST", "http://localhost:3005/category/add");
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("category_name="+cat_Name);
+
+            /****
+                const xhttp = new XMLHttpRequest()
+                xhttp.onload = function() {
+                xhttp.open("POST", "http://localhost:3005/category/add");
+                xhttp.send("category_name="+cat_Name);
+               }
+                **/
+        }
+        
+    </script>
+</body>
+</html>

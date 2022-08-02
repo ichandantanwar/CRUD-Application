@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <title>product add</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="nimaptest.html">Home</a></li>
+        <li class="breadcrumb-item"><a href="product-list.html">Product-list</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Product-add</li>
+    </ul>
+    </div>
+    
+        <h2>Product Add</h2>
+      
+    <form action="" method="get">
+        <div class="mb-3 mt-3">
+            
+           
+            <h4><label for="name" class="form-label">Product Name: </label></h4>
+            <input type="text" name="name" class="form-control" id="pa_name">
+        </div>
+        
+      
+    
+        <div class="mb-3 mt-3">
+           <h4> 
+            <label for="category name" class="form-label">Category : </label>
+           </h4>
+            <select name="category name" class="form-control" id="pa_category_name">
+                <option value="category_1">category 1</option>
+                <option value="category_2">category 2</option>
+                <option value="category_3">category 3</option>
+                <option value="category_4">category 4</option>
+                <option value="category_5">category 5</option>
+            </select>
+        </div>
+        <div class="mb-3 mt-3">
+           <button class="btn btn-primary" type="button" onclick="add()">Add</button>&nbsp;&nbsp;
+           <a class="btn btn-secondary" href="product-list.html">Cancel</a>
+        </div>
+    </form>
+    
+    
+    
+    </div>
+    <script>
+        
+      function getCategoryList()
+      {
+        var result='<option value="">Select Category</option>';
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+            var data=this.responseText;
+            data=JSON.parse(data);
+            if(data.result.length>0)
+                {
+                for(i=0;i<data.result.length;i++)
+                {
+                    result+=`<option value="${data.result[i].id}">${data.result[i].name}</option>`;
+                }
+                document.getElementById("pa_category_name").innerHTML=result;
+                }
+        }
+        xhttp.open("GET", "http://localhost:3005/category/list");
+        xhttp.send();
+      }
+      getCategoryList();
+      function add()
+      {
+        let p_Name = document.getElementById("pa_name").value;
+        let category_id=document.getElementById("pa_category_name").value;
+        p_Name = p_Name.trim()
+        if(p_Name=="")
+        {
+            document.getElementById("pa_name").focus();
+            return false;
+        }
+        const xhttp = new XMLHttpRequest();
+            xhttp.onload = function() {
+                alert("product Added Successfully.");
+                window.location.href="product-list.html";
+            }
+            xhttp.open("POST", "http://localhost:3005/product/add");
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("product_name="+p_Name+"&category_id="+category_id);
+           
+
+      }
+
+    </script>
+</body>
+</html>

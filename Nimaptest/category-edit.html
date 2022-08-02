@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <title>category-edit</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="nimaptest.html">Home</a></li>
+        <li class="breadcrumb-item"><a href="category-list.html">Category-list</a></li>
+    </ul>
+    </div>
+    
+        <h2>Category-edit</h2>
+      
+    <form action="" method="get">
+        <div class="mb-3 mt-3">
+            
+            
+            <h4><label for="id" class="form-label">Category Name: </label></h4>
+            <input type="text" name="name" class="form-control" id="ce_name">
+        </div><br>
+        <div class="mb-3 mt-3">
+        <button class="btn btn-primary" type="button" onclick="update()">Update</button>&nbsp;&nbsp;
+        <a class="btn btn-secondary" href="category-list.html">Cancel</a>
+        </div>
+    </form>
+    
+    
+    
+    </div>
+    <script>
+        const urlParams = new URLSearchParams(location.search);
+        const id = urlParams.get('id');
+       function getCategorySinglData()
+       {
+      
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function()
+        {
+                data=this.responseText;
+                data=JSON.parse(data)
+         if(data.result)
+            {
+                document.getElementById("ce_name").value=data.result[0].name;
+            }
+        }
+            xhttp.open("GET", "http://localhost:3005/category/getdata?id="+id);
+            xhttp.send();
+           
+       }
+       getCategorySinglData(id);
+    //    window.location.href="category-list.html"
+       
+function update()
+{    let c_Name = document.getElementById("ce_name").value; 
+
+    const xhttp = new XMLHttpRequest();
+            xhttp.onload = function() {
+                alert("category updated Successfully.");
+                window.location.href="category-list.html";
+            }
+            xhttp.open("post", "http://localhost:3005/category/update");
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("category_name="+c_Name+"&id="+id);
+            getCategorySinglData(id);
+}
+    </script>
+</body>
+</html>

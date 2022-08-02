@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <title>Product list</title>
+</head>
+<body>
+   <div class="container">
+        <h2>Product List</h2>
+        <a href="product-add.html">Add</a>&nbsp;&nbsp;
+        <!-- <a href="product-edit.html">Edit</a> -->
+      <div class="row">
+        <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="nimaptest.html">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Product-list</li>
+        
+        </ul>
+      </div>
+         <table class="table">
+            <thead class="table-dark ">
+              <tr>
+                <th>Product Id</th>
+                <th>Product Name</th>
+                <th>Product Category</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id = "product_list">
+              
+            </tbody>
+          </table>
+   </div>
+       
+   <script>
+      function getProductList()
+      {
+          var result_P='';
+          const xhttp = new XMLHttpRequest();
+          xhttp.onload = function() 
+          {
+              var data=this.responseText;
+              data=JSON.parse(data);
+              console.log(data)
+              console.log(data.result_P)
+              if(data.result_P.length>0)
+              {
+              for(i=0;i<data.result_P.length;i++)
+              {
+                  result_P+=
+                  `<tr>
+                    <td>${data.result_P[i].id}</td>
+                    <td>${data.result_P[i].name}</td>
+                    <td>${data.result_P[i].cat_name}</td>
+                    <td>
+                      <a href="product-edit.html?id=${data.result_P[i].id}">
+                        <span class="glyphicon">&#xe065;</span>
+                      </a> | 
+                      <button onclick="deleteProduct(${data.result_P[i].id})">
+                        <span class="glyphicon">&#xe020;</span
+                      </button>
+                    </td>
+                  </tr>`;
+              }
+              }
+              else
+              {
+                  result_P+="<tr><td colspan='4'>No record found</td></tr>"
+              }
+              console.log(result_P)
+              document.getElementById("product_list").innerHTML=result_P;
+
+          }
+          
+          xhttp.open("GET", "http://localhost:3005/product/list");
+          xhttp.send();
+      }
+      getProductList();
+      function deleteProduct(id)
+      {
+          if(confirm("Are you sure, you want to delete this record?"))
+          {
+              const xhttp = new XMLHttpRequest();
+              xhttp.onload = function() {
+                  getProductList();
+              }
+              xhttp.open("DELETE", "http://localhost:3005/product/delete");
+              xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+              xhttp.send("id="+id);
+          }
+      }
+   </script> 
+</body>
+</html>

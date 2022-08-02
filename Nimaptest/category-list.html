@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <title>category list</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Category-List</h2>
+        <a href="category-add.html">Add</a>&nbsp;&nbsp;
+        <!-- <a href="category-edit.html">Edit</a> -->
+        <div class="row">
+        <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="nimaptest.html">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Category-list</li>
+        
+        </ul>
+    </div>
+    <table class="table">
+        <thead class="table-dark">
+          <tr>
+            <th>Category Id</th>
+            <th>Category name</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="category_list">
+          
+        </tbody>
+      </table>
+    </div>
+    <script>
+        function getCategoryList()
+        {
+            var result='';
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function() {
+                var data=this.responseText;
+                data=JSON.parse(data);
+                console.log(data)
+                console.log(data.result)
+                if(data.result.length>0)
+                {
+                for(i=0;i<data.result.length;i++)
+                {
+                    result+=`<tr><td>${data.result[i].id}</td><td>${data.result[i].name}</td><td><a href="category-edit.html?id=${data.result[i].id}"><span class="glyphicon">&#xe065;</span></a> | <button onclick="deleteCategory(${data.result[i].id})"><span class="glyphicon">&#xe020;</span</button></td></tr>`;
+                }
+                }
+                else
+                {
+                    result+="<tr><td colspan='3'>No record found</td></tr>"
+                }
+                console.log(result)
+                document.getElementById("category_list").innerHTML=result;
+
+            }
+            
+            xhttp.open("GET", "http://localhost:3005/category/list");
+            xhttp.send();
+        }
+        getCategoryList();
+        function deleteCategory(id)
+        {
+            if(confirm("Are you sure, you want to delete this record?"))
+            {
+                const xhttp = new XMLHttpRequest();
+                xhttp.onload = function() {
+                    getCategoryList();
+                }
+                xhttp.open("DELETE", "http://localhost:3005/category/delete");
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhttp.send("id="+id);
+            }
+        }
+    </script>
+</body>
+</html>
